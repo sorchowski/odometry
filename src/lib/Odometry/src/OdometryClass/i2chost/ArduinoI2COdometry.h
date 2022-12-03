@@ -4,10 +4,18 @@
 #include <Arduino.h>
 #include <Wire.h>
 #include <Odometry.h>
+#include <OdometryClass/OdometryPayload.h>
 
 class ArduinoI2COdometry: public Odometry {
 
     public:
+
+        struct Velocities {
+            float velocity1;
+            float velocity2;
+            byte status1;
+            byte status2;
+        };
 
         ArduinoI2COdometry(
             float wheel_diameter, // in meters
@@ -20,21 +28,25 @@ class ArduinoI2COdometry: public Odometry {
 
         Odometry::Velocity_t getVelocity(unsigned long timePeriod);
 
+        Velocities getVelocities(unsigned long timePeriod);
+
         bool direction();
 
     protected:
-
-        short count1() {return receive_count1;}
-        short count2() {return receive_count2;}
 
         void getCounts();
 
     private:
 
-        short receive_count1;
-        short receive_count2;
+        unsigned short m_i2c_address;
 
-        unsigned int m_receive_count_size; // in bytes
+        Stream *m_serial_port;
+        TwoWire *m_wire_port;
+
+        int m_odometry_payload_size;
+
+        byte m_status1;
+        byte m_status2;
 
         long m_current_count1;
         long m_current_count2;
@@ -42,12 +54,6 @@ class ArduinoI2COdometry: public Odometry {
         long m_last_count1;
         long m_last_count2;
 
-        unsigned short m_i2c_address;
-
-        Stream *m_serial_port;
-        TwoWire *m_wire_port;
-
-        byte m_count_buffer[2+2]; // two shorts
 };
 
 #endif // ARDUINO_I2C_ODOMETRY_H

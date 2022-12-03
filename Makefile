@@ -18,7 +18,7 @@ SERIAL_PORT ?= COM4
 # Build path -- used to store built binary and object files
 BUILD_DIR ?= build
 
-WIN_LIBRARY_PATH = /mnt/c/Users/steve/OneDrive/Documents/Arduino/libraries
+WIN_LIBRARY_PATH = /mnt/c/Users/steve/Documents/Arduino/libraries
 
 .PHONY: all sketch sketch-verbose upload clean install-lib uninstall-lib zip
 

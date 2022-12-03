@@ -79,6 +79,7 @@ namespace LS7366R
     class QuadratureEncoder
     {
         public:
+
             QuadratureEncoder(int enc_select, byte mdr0_config, byte mdr1_config);
 
             void init();
@@ -113,6 +114,7 @@ namespace LS7366R
             bool statusSign(byte status); // 1: negative, 0: positive
 
         private:
+
             int m_enc_select;
             int m_counter_size;
             byte m_mdr0_config;
