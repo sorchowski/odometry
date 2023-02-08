@@ -1,7 +1,9 @@
-#include <LS7366R.h>
+
+#include <Odometry.h>
+#include <OdometryClass/ls7366/LS7366R.h>
 #include <SPI.h>
 
-#define ENCODER_SS 10
+#define ENCODER_SS 9
 
 using namespace LS7366R;
 
@@ -14,7 +16,7 @@ void setup(){
   Serial.begin(115200);
   pinMode(ENCODER_SS, OUTPUT);
   SPI.begin();
-  encoder.begin();
+  encoder.init();
 }
 
 void loop() {

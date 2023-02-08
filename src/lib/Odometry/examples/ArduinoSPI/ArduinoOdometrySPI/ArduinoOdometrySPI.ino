@@ -4,7 +4,17 @@
 
 #include <SPI.h>
 
-#define ENCODER_SELECT 10
+// For 3.3v shield:
+// Encoder near the Dx pins
+#define ENCODER1_SELECT 9
+// Encoder near the Ax and power pins
+#define ENCODER2_SELECT 10
+
+// For 5v shield:
+// Encoder near the Dx pins
+//#define ENCODER1_SELECT 10
+// Encoder near the Ax and power pins
+//#define ENCODER2_SELECT 9
 
 using namespace LS7366R;
 
@@ -18,17 +28,22 @@ float wheel_diameter = 0.1016;
 // 30:1 metal gear motor with encoder at 64 counts per revolution. 1920=30*64
 unsigned int ticks_per_revolution = 1920;
 
-QuadratureEncoder encoder(ENCODER_SELECT, MDR0_CONFIG, MDR1_CONFIG);
-ArduinoSPIOdometry odometry(wheel_diameter, ticks_per_revolution, true, &Serial, &encoder);
+QuadratureEncoder encoder1(ENCODER1_SELECT, MDR0_CONFIG, MDR1_CONFIG);
+ArduinoSPIOdometry odometry1(wheel_diameter, ticks_per_revolution, true, &Serial, &encoder1);
+
+QuadratureEncoder encoder2(ENCODER2_SELECT, MDR0_CONFIG, MDR1_CONFIG);
+ArduinoSPIOdometry odometry2(wheel_diameter, ticks_per_revolution, true, &Serial, &encoder2);
 
 unsigned long currentMicros = 0;
 unsigned long lastMicros = 0;
 
 void setup(){
   Serial.begin(115200);
-  pinMode(ENCODER_SELECT, OUTPUT);
+  pinMode(ENCODER1_SELECT, OUTPUT);
+  pinMode(ENCODER2_SELECT, OUTPUT);
   SPI.begin();
-  odometry.begin();
+  odometry1.begin();
+  odometry2.begin();
 }
 
 void loop() {
@@ -36,16 +51,24 @@ void loop() {
 
   currentMicros = micros();
   unsigned long timePeriod = currentMicros - lastMicros;
-  Odometry::Velocity_t velocity = odometry.getVelocity(timePeriod);
-  Serial.println("Velocity: "+String(velocity, 4));
-  //Serial.println("timePeriod: "+String(timePeriod));
-  bool direction = odometry.direction();
-  Serial.println("direction: "+String(direction));
-  //long count = encoder.count();
-  //byte status = encoder.status();
-  //Serial.print("count: ");
-  //Serial.print(count);
-  //Serial.print(", status: ");
-  //Serial.println(status);
+
+  Odometry::Velocity_t velocity1 = odometry1.getVelocity(timePeriod);
+  Serial.println("Velocity1: "+String(velocity1, 4));
+  bool direction1 = odometry1.direction();
+  Serial.println("direction1: "+String(direction1));
+
+  Odometry::Velocity_t velocity2 = odometry2.getVelocity(timePeriod);
+  Serial.println("Velocity2: "+String(velocity2, 4));
+  bool direction2 = odometry2.direction();
+  Serial.println("direction2: "+String(direction2));
+
+  //long count = encoder1.count();
+  //byte status = encoder1.status();
+  //Serial.print("count1: ");
+  //Serial.print(count1);
+  //Serial.print(", status1: ");
+  //Serial.println(status1);
+
   lastMicros = currentMicros;
+
 }
