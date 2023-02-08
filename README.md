@@ -13,9 +13,9 @@ A collection of classes, Arduino sketches, and hardware schematics to form a sys
    - [I2C](#i2c)
 3. [Hardware](#hardware)
    - [5 Volt Shield](#5-volt-shield)
-    ### 5v Arduino Pin Mappings
-   - [3.3 Volt Shield](#3.3-volt-shield)
-    ### 3.3v Arduino Pin Mappings
+      - [5v Arduino Pin Mappings](#5v-arduino-pin-mappings)
+   - [3 Volt Shield](#3-volt-shield)
+      - [3v Arduino Pin Mappings](#3v-arduino-pin-mappings)
    - [I2C Standalone](#i2c-standalone)
 4. [Future Features](#future-features)
 
@@ -23,7 +23,7 @@ A collection of classes, Arduino sketches, and hardware schematics to form a sys
 
 ## LS7366
 
-The [LS7366R](https://lsicsi.com/datasheets/LS7366R.pdf) is a 32-bit Quadrature Encoder chip interfaced via SPI. [This class](src\lib\Odometry\src\OdometryClass\ls7366) abstracts the various capabilities of the chip to a set of easily-invoked methods.
+The [LS7366R](https://lsicsi.com/datasheets/LS7366R.pdf) is a 32-bit Quadrature Encoder chip interfaced via SPI. [This class](src/lib/Odometry/src/OdometryClass/ls7366) abstracts the various capabilities of the chip to a set of easily-invoked methods.
 
 ### How to Use
 
@@ -39,7 +39,7 @@ The QuadratureEncoder class resides within the LS7366R namespace.
 
 Default values, MDR0_DEFAULT_CONFIG and MDR1_DEFAULT_CONFIG, are available for the MDR0 and MDR1 configuration registers.
 
-See the [LS7366R.h header file](src/ls7366/LS7366R.h) for a complete list of availavble options. These are 'OR-ed' together to obtain final register values.
+See the [LS7366R.h header file](src/lib/Odometry/src/OdometryClass/ls7366/LS7366R.h) for a complete list of availavble options. These are 'OR-ed' together to obtain final register values.
 
 ### Example Arduino sketch
 
@@ -68,23 +68,23 @@ void loop() {
 }
 ```
 
-The full sketch is available under [LS7366-basic](src\lib\Odometry\examples\ArduinoSPI\LS7366-basic).
+The full sketch is available under [LS7366-basic](src/lib/Odometry/examples/ArduinoSPI/LS7366-basic).
 
-A sketch which manually executes raw SPI commands directly to chip to demonstrate the quadrature capabilities is also available under [LS7366-raw](src\lib\Odometry\examples\ArduinoSPI\LS7366-raw).
+A sketch which manually executes raw SPI commands directly to chip to demonstrate the quadrature capabilities is also available under [LS7366-raw](src/lib/Odometry/examples/ArduinoSPI/LS7366-raw).
 
 # Interfaces
 
-[Odometry](src\lib\Odometry\src\Odometry.h) declares basic velocity and directional methods common to either SPI or I2C implementations.
+[Odometry.h](src/lib/Odometry/src/Odometry.h) declares basic velocity and directional methods common to either SPI or I2C implementations.
 
 ## SPI
 
-[ArduinoOdometrySPI](src\lib\Odometry\src\OdometryClass\spi) - Provides an implementation of AbstractOdometry for connecting an Arduino to an Ls7366R quadrature encoder via the SPI interface.
+[ArduinoOdometrySPI](src/lib/Odometry/src/OdometryClass/spi) - Provides an implementation of AbstractOdometry for connecting an Arduino to an Ls7366R quadrature encoder via the SPI interface.
 
 ## I2C
 
-[ArduinoI2COdometry](src\lib\Odometry\src\OdometryClass\i2chost) - Provides an implementation of AnstractOdometry for connecting an Arduino to a peripheral over the I2C interface. The peripheral implements the interface to the LS7366 chip. See the [ArduinoI2CPeripheral.ino](src\lib\Odometry\examples\ArduinoI2C\ArduinoI2CPeripheral\ArduinoI2CPeripheral.ino) sketch for the example implementation.
+[ArduinoI2COdometry](src/lib/Odometry/src/OdometryClass/i2chost) - Provides an implementation of AnstractOdometry for connecting an Arduino to a peripheral over the I2C interface. The peripheral implements the interface to the LS7366 chip. See the [ArduinoI2CPeripheral.ino](src/lib/Odometry/examples/ArduinoI2C/ArduinoI2CPeripheral/ArduinoI2CPeripheral.ino) sketch for the example implementation.
 
-[OdometryPayload.h](src\lib\Odometry\src\OdometryClass\OdometryPayload.h) provides a struct definition for packaging quadrature encoder count and status data to be transmitted over the I2C line.
+[OdometryPayload.h](src/lib/Odometry/src/OdometryClass/OdometryPayload.h) provides a struct definition for packaging quadrature encoder count and status data to be transmitted over the I2C line.
 
 # Hardware
 
@@ -94,7 +94,7 @@ The LS7366 chip operates at 5 volts and the accompanying 40 Mhz must also be sup
 
 ## 5 Volt Shield
 
-The [5 volt shield](schematics\DualEncoderShield5v) is meant for use with an Arduino that operates I/O logic levels between 0 and 5 volts; such as an Uno.
+The [5 volt shield](schematics/DualEncoderShield5v) is meant for use with an Arduino that operates I/O logic levels between 0 and 5 volts; such as an Uno.
 
 The 5 volt shield exposes the DFLAG and LFLAG outputs of the LS7366 chip.
 
@@ -118,15 +118,15 @@ Chip Select | 9
 L2 | 6
 D2 | 4
 
-## 3.3 Volt Shield
+## 3 Volt Shield
 
-The [3.3 volt shield](schematics\DualEncoderShield3v) is meant for use with an Arduino that operates with I/O logic levels between 0 and 3.3 volts; such as a Due. A TXU0304 chip on board provides level-shifting for SPI and one chip select signal. A single TXU0101 translates the other chip select signal for the second encoder.
+The [3.3 volt shield](schematics/DualEncoderShield3v) is meant for use with an Arduino that operates with I/O logic levels between 0 and 3.3 volts; such as a Due. A TXU0304 chip on board provides level-shifting for SPI and one chip select signal. A single TXU0101 translates the other chip select signal for the second encoder.
 
 The 3.3 volt shield does not expose the DFLAG nor LFLAG outputs of the LS7366 chip.
 
 Onboard jumpers enable users to map the features below to any pin.
 
-### 3.3v Arduino Pin Mappings
+### 3v Arduino Pin Mappings
 
 Encoder One (near the Dx pins)
 Feature | Pin
