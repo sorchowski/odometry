@@ -76,6 +76,8 @@ A sketch which manually executes raw SPI commands directly to chip to demonstrat
 
 [Odometry.h](src/lib/Odometry/src/Odometry.h) declares basic velocity and directional methods common to either SPI or I2C implementations.
 
+TODO: describe defining wheel measurements and action of class to obtain velocity in meters/s
+
 ## SPI
 
 [ArduinoOdometrySPI](src/lib/Odometry/src/OdometryClass/spi) - Provides an implementation of AbstractOdometry for connecting an Arduino to an Ls7366R quadrature encoder via the SPI interface.
