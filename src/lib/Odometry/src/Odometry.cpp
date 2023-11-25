@@ -17,4 +17,6 @@ Odometry::Odometry(
     const float PI = 3.14159;
 
     this->m_velocity_constant = (this->m_wheel_diameter * PI * scalingFactor) / ((float)(this->m_ticks_per_revolution));
+
+    this->m_radians_constant = (2.0 * PI * scalingFactor) / ((float)(this->m_ticks_per_revolution));
 }

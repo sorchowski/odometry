@@ -24,7 +24,15 @@ class Odometry {
 
         typedef float Velocity_t;
 
+        /**
+         * Calculate the linear velocity of a wheel
+        */
         virtual Velocity_t getVelocity(unsigned long timePeriod) = 0;
+
+        /**
+         * Calculate the rotational velocity of a wheel in radians per second
+        */
+        virtual Velocity_t radiansPerSecond(unsigned long timePeriod) = 0;
 
         /**
          * Return the rotational direction of the wheel.
@@ -39,9 +47,14 @@ class Odometry {
         float m_wheel_diameter;
         unsigned int m_ticks_per_revolution;
 
-        // The following value allows us to reduce calculations when determining wheel velocity
+        // The following value allows us to reduce calculations:
+        
+        // when determining wheel velocity
         // constant = (circumference * full time period in ms or us) / ticks per wheel revolution
         float m_velocity_constant;
+
+        // when determining wheel radians per second
+        float m_radians_constant;
 
         long m_current_count;
 

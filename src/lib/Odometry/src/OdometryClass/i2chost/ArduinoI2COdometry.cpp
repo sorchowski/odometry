@@ -64,6 +64,10 @@ Odometry::Velocity_t ArduinoI2COdometry::getVelocity(unsigned long timePeriod)
     return velocities.velocity1;
 }
 
+Odometry::Velocity_t ArduinoI2COdometry::radiansPerSecond(unsigned long timePeriod) {
+    // TODO
+}
+
 ArduinoI2COdometry::Velocities ArduinoI2COdometry::getVelocities(unsigned long timePeriod) {
 
     getCounts();

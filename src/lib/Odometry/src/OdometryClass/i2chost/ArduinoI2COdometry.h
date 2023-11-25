@@ -28,6 +28,8 @@ class ArduinoI2COdometry: public Odometry {
 
         Odometry::Velocity_t getVelocity(unsigned long timePeriod);
 
+        Odometry::Velocity_t radiansPerSecond(unsigned long timePeriod);
+
         Velocities getVelocities(unsigned long timePeriod);
 
         bool direction();

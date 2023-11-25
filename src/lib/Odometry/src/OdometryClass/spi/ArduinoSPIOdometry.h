@@ -51,6 +51,8 @@ class ArduinoSPIOdometry: public Odometry {
 
         Odometry::Velocity_t getVelocity(unsigned long timePeriod);
 
+        Odometry::Velocity_t radiansPerSecond(unsigned long timePeriod);
+
         bool direction();
 
     protected:

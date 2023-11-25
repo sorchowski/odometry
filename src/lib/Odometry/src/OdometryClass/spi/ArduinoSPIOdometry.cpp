@@ -48,6 +48,27 @@ Odometry::Velocity_t ArduinoSPIOdometry::getVelocity(unsigned long timePeriod)
     return velocity;
 }
 
+Odometry::Velocity_t ArduinoSPIOdometry::radiansPerSecond(unsigned long timePeriod) {
+
+    getCounts();
+
+    long countDiff = this->m_current_count - this->m_last_count;
+
+    // Radians per revolution = 2 * PI
+    // wheel rotated factor = num ticks (tick diff) / num ticks per revolution
+    float radiansPerSecond = (this->m_radians_constant * countDiff) / timePeriod;
+
+    this->m_last_count = this->m_current_count;
+
+    if (NULL != m_serial_port)
+    {
+        String countStr = "Count: " + String(this->m_current_count);
+        m_serial_port->println(countStr);
+    }
+
+    return radiansPerSecond;
+}
+
 void ArduinoSPIOdometry::getCounts()
 {
 
