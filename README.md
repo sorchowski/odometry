@@ -95,6 +95,8 @@ Several Arduino shields are available. Each shield contains two LS7366 Quadratur
 
 The LS7366 chip operates at 5 volts and the accompanying 40 Mhz must also be supplied by 5 volts as well.
 
+Each shield is created using a free version of Autodesk EAGLE cad and fabricated using [Oshpark](https://oshpark.com/).
+
 ## 5 Volt Shield
 
 The [5 volt shield](schematics/DualEncoderShield5v) is meant for use with an Arduino that operates I/O logic levels between 0 and 5 volts; such as an Uno.
@@ -180,3 +182,4 @@ Video of the test is [here](https://youtube.com/shorts/RxdmSXZlh9c)
 * Create an abstract Quadrature class and pass an instance of this to the Odometry class. This makes the Odometry class independent of how quadrature counts are obtained. Convert the existing QuadratureEncoder class to a LS7366-specific implementation class.
 * Rename "getVelocity()" to just "velocity()".
 * See note in ArduinoSPIOdometry.h. Both getVelocity() and radiansPerSecond() invoke getCounts(). Therefore, callers of these methods have to be careful when passing the time delta value to either if both are present in a program. We should extract the call to getCounts() to a public method named "update()" which syncs the current count values. Subsequent calls to either getVelocity() or radiansPerSecond() are passed the time delta of the last two calls of "update()" and simply calculate the odometry measurements based on the last updated count values.
+* Update the 3.3 volt shield to expose the DFLAG and LFLAG outputs of the 5v LS7366 chip.
