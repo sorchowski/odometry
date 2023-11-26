@@ -17,7 +17,8 @@ A collection of classes, Arduino sketches, and hardware schematics to form a sys
    - [3 Volt Shield](#3-volt-shield)
       - [3v Arduino Pin Mappings](#3v-arduino-pin-mappings)
    - [I2C Standalone](#i2c-standalone)
-4. [Future Features](#future-features)
+4. [Testing](#testing)
+5. [Future Features](#future-features)
 
 # Components
 
@@ -148,6 +149,34 @@ A PCA9306D chip provides logic level translation between 5v and 3.3v for the I2C
 
 Of course, either the 3.3v or 5v shields can also be used as a I2C peripheral when attached to an Arduino with the appropriate peripheral sketch uploaded.
 
+Note, the latest revision of the I2C standalone board is not tested nor confirmed to work properly.
+
+# Testing
+
+## Velocity
+
+To test the velocity measurements, a small, simple, two-wheeled cart ran in a straight line over measured intervals each of one meter. Note, the cart starting point was slightly before the first one meter marker. This is to allow the cart to reach a full and consistent speed before timing is begun.
+
+See [image of the test setup](docs/testing/testing-vehicle-odometry.jpg)
+
+Video of the test is [here](https://youtube.com/shorts/Ld17I0CanR0)
+
+### Radians per second
+
+In testing radiansPerSecond(), I observed 10 revolutions over 15.88 seconds. The measured value returned by this method was roughly 3.98 radians per second.
+
+Using a visual method of measuring the rotation of the wheel with a tape mark and a timer; we can count 10 revolutions of the tape marker while timing how long these revolutions took.
+
+There are 2*pi radians in a revolution = 6.283. 10 revolutions times 6.283 radians per revolution = 62.83 radians over 15.88 seconds. 62.83 radians / 15.88 seconds = 3.956 radians per second; which is close to the value output by the odometry logic.
+
+Note, the visual method of measuring wheel rotations and timing each one is subject to human inaccuracies :)
+
+Video of the test is [here](https://youtube.com/shorts/RxdmSXZlh9c)
+
 # Future Features
 
-Implement the DFLAG and LFLAG signals for the 3.3v shield via use of four additional TXU0101 chips.
+* Implement the DFLAG and LFLAG signals for the 3.3v shield via use of four additional TXU0101 chips.
+* Create an abstract SPI class and then Arduino-specific SPI class implementation. Modify the LS7366 class to accept an abstract SPI "interface" class to make the LS7366 class independent of an specific host and generic to any SPI interface.
+* Create an abstract Quadrature class and pass an instance of this to the Odometry class. This makes the Odometry class independent of how quadrature counts are obtained. Convert the existing QuadratureEncoder class to a LS7366-specific implementation class.
+* Rename "getVelocity()" to just "velocity()".
+* See note in ArduinoSPIOdometry.h. Both getVelocity() and radiansPerSecond() invoke getCounts(). Therefore, callers of these methods have to be careful when passing the time delta value to either if both are present in a program. We should extract the call to getCounts() to a public method named "update()" which syncs the current count values. Subsequent calls to either getVelocity() or radiansPerSecond() are passed the time delta of the last two calls of "update()" and simply calculate the odometry measurements based on the last updated count values.

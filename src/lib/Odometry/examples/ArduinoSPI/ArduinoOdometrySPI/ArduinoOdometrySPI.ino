@@ -4,11 +4,21 @@
 
 #include <SPI.h>
 
+// This sketch depends on https://github.com/sorchowski/PololuDualG2HighPowerMotorShield
+#include <PololuDualG2HighPowerMotorShield.h>
+
 // For 3.3v shield:
 // Encoder near the Dx pins
 #define ENCODER1_SELECT 9
 // Encoder near the Ax and power pins
 #define ENCODER2_SELECT 10
+
+// Motor control pins
+#define MOTOR1_DIR_PIN 2
+#define MOTOR1_PWM_PIN 3
+
+#define MOTOR2_DIR_PIN 6
+#define MOTOR2_PWM_PIN 7
 
 // For 5v shield:
 // Encoder near the Dx pins
@@ -22,7 +32,7 @@ byte MDR0_CONFIG = MDR0_X4QUAD|MDR0_FREE_CNT|MDR0_IDX_DISABLE|MDR0_FILTR_CLK_DIV
 byte MDR1_CONFIG = MDR1_CNT_4BYTE|MDR1_FLAG_NONE;
 
 // in meters (4 inches)
-float wheel_diameter = 0.1016;
+float wheel_diameter = 0.100;
 
 // https://www.pololu.com/product/28233
 // 30:1 metal gear motor with encoder at 64 counts per revolution. 1920=30*64
@@ -37,30 +47,42 @@ ArduinoSPIOdometry odometry2(wheel_diameter, ticks_per_revolution, true, &Serial
 unsigned long currentMicros = 0;
 unsigned long lastMicros = 0;
 
+PololuDualG2HighPowerMotorShield motorController(MOTOR1_DIR_PIN, MOTOR1_PWM_PIN, MOTOR2_DIR_PIN, MOTOR2_PWM_PIN, 12);
+
 void setup(){
+
   Serial.begin(115200);
   pinMode(ENCODER1_SELECT, OUTPUT);
   pinMode(ENCODER2_SELECT, OUTPUT);
   SPI.begin();
   odometry1.begin();
   odometry2.begin();
+
+  motorController.init();
+
+  motorController.setSpeed1(500);
+  //motorController.setSpeed2(500);
 }
 
 void loop() {
+
   delay(1000);
 
   currentMicros = micros();
   unsigned long timePeriod = currentMicros - lastMicros;
 
-  Odometry::Velocity_t velocity1 = odometry1.getVelocity(timePeriod);
-  Serial.println("Velocity1: "+String(velocity1, 4));
-  bool direction1 = odometry1.direction();
-  Serial.println("direction1: "+String(direction1));
+  float radiansPerSecond1 = odometry1.radiansPerSecond(timePeriod);
+  Serial.println("radiansPerSecond1: "+String(radiansPerSecond1, 4));
 
-  Odometry::Velocity_t velocity2 = odometry2.getVelocity(timePeriod);
-  Serial.println("Velocity2: "+String(velocity2, 4));
-  bool direction2 = odometry2.direction();
-  Serial.println("direction2: "+String(direction2));
+  //Odometry::Velocity_t velocity1 = odometry1.getVelocity(timePeriod);
+  //Serial.println("Velocity1: "+String(velocity1, 4));
+  //bool direction1 = odometry1.direction();
+  //Serial.println("direction1: "+String(direction1));
+
+  //Odometry::Velocity_t velocity2 = odometry2.getVelocity(timePeriod);
+  //Serial.println("Velocity2: "+String(velocity2, 4));
+  //bool direction2 = odometry2.direction();
+  //Serial.println("direction2: "+String(direction2));
 
   //long count = encoder1.count();
   //byte status = encoder1.status();

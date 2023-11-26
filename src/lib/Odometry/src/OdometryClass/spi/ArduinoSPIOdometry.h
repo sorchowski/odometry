@@ -5,7 +5,6 @@
 #include <Odometry.h>
 #include <OdometryClass/ls7366/LS7366R.h>
 
-
 /*
     An implementation of Odometry that connects a LS7366 Quadrature encoder to an Arduino via the SPI interface.
 
@@ -33,7 +32,6 @@
 
     AbstractOdometry::Odometry_t odometry = odometry.getVelocity(<time period>);
 
-
 */
 
 class ArduinoSPIOdometry: public Odometry {
@@ -48,6 +46,17 @@ class ArduinoSPIOdometry: public Odometry {
             LS7366R::QuadratureEncoder* encoder);
 
         void begin();
+
+        // Note: both getVelocity() and radiansPerSecond() invoke getCounts();
+        //  If you application invokes both methods, the timePeriod must measure
+        //  the time between invocations of either method. For example, if your
+        //  application calls getVelocity AND then radiansPerSecond once per
+        //  second, the timePeriod passed to radiansPerSecond must be the difference
+        //  in time from the prior call to getVelocity. You cannot pass 1000 to both
+        //  methods as the internal call to "getCounts" will reset the current and
+        //  last count values. In the future, we should consider extracting the call
+        //  to getCounts(), and allow individuals to calculate velocity or radians
+        //  at will.
 
         Odometry::Velocity_t getVelocity(unsigned long timePeriod);
 
