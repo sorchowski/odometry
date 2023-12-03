@@ -93,7 +93,7 @@ TODO: describe defining wheel measurements and action of class to obtain velocit
 
 Several Arduino shields are available. Each shield contains two LS7366 Quadrature Encoder chips.
 
-The LS7366 chip operates at 5 volts and the accompanying 40 Mhz must also be supplied by 5 volts as well.
+The LS7366 chip operates at 5 volts and the accompanying 40 Mhz oscillator also requires 5 volts as well.
 
 Each shield is created using a free version of Autodesk EAGLE cad and fabricated using [Oshpark](https://oshpark.com/).
 
@@ -103,7 +103,7 @@ The [5 volt shield](schematics/DualEncoderShield5v) is meant for use with an Ard
 
 The 5 volt shield exposes the DFLAG and LFLAG outputs of the LS7366 chip.
 
-Onboard jumpers enable users to map the features below to any pin.
+Onboard jumpers enable users to map the features below to any pin. But the pins listed below are the default when utilizing a simple two-pin jumper.
 
 ### 5v Arduino Pin Mappings
 
@@ -129,7 +129,7 @@ The [3.3 volt shield](schematics/DualEncoderShield3v) is meant for use with an A
 
 The 3.3 volt shield does not expose the DFLAG nor LFLAG outputs of the LS7366 chip.
 
-Onboard jumpers enable users to map the features below to any pin.
+Onboard jumpers enable users to map the features below to any pin. But the pins listed below are the default when utilizing a simple two-pin jumper.
 
 ### 3v Arduino Pin Mappings
 
