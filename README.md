@@ -91,7 +91,7 @@ TODO: describe defining wheel measurements and action of class to obtain velocit
 
 # Hardware
 
-Several Arduino shields are available. Each shield contains two LS7366 Quadrature Encoder chips.
+Several Arduino shields are available. Each shield contains two LS7366 Quadrature Encoder chips for tracking encoder counts. Dual JST connectors for 3.3v and 5.0v power are available along with a pair of [I2C qwiic connectors](https://www.sparkfun.com/qwiic).
 
 The LS7366 chip operates at 5 volts and the accompanying 40 Mhz oscillator also requires 5 volts as well.
 
